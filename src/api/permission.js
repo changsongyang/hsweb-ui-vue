@@ -1,7 +1,7 @@
 import * as API from './index'
 
 export function getPermissList () {
-  const url = '/api/permission'
+  const url = '/permission'
   const data = Object.assign({}, {
     pageIndex: 0,
     pageSize: 20,

@@ -4,7 +4,7 @@ import Vue from 'vue'
 let v = new Vue()
 
 axios.defaults.withCredentials = true
-
+// axios.defaults.baseURL = '/api'
 axios.create({
   headers: {'content-type': 'application/x-www-form-urlencoded'}
 })

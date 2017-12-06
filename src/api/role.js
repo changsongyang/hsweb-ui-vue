@@ -1,7 +1,7 @@
 import * as API from './index'
 
 export function getRoleList () {
-  const url = '/api/role'
+  const url = '/role'
   const data = Object.assign({}, {
     pageIndex: 0,
     pageSize: 10,
@@ -16,15 +16,15 @@ export function getRoleList () {
 }
 
 export function addRole (roleParams) {
-  return API.POST('/api/role', roleParams)
+  return API.POST('/role', roleParams)
 }
 
 export function editRole (id, roleParams) {
-  return API.PUT(`/api/role/${id}`, roleParams)
+  return API.PUT(`/role/${id}`, roleParams)
 }
 
 export function searchRole (queryParams, queryParamsIndex) {
-  const url = '/api/role'
+  const url = '/role'
   const data = Object.assign({}, queryParams, queryParamsIndex)
   return API.GET(url, {
     params: data

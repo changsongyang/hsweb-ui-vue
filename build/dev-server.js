@@ -87,7 +87,7 @@ const apiRoutes = express.Router()
   })
 })*/
 
-app.use('/api', apiRoutes)
+//app.use('/api', apiRoutes)
 
 const compiler = webpack(webpackConfig)
 

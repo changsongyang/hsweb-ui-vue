@@ -1,7 +1,7 @@
 import * as API from './index'
 
 export function getMenuList (sortIndex) {
-  const url = '/api/menu'
+  const url = '/menu'
   const data = Object.assign({}, {
     paging: false,
     pageIndex: 0,
@@ -17,7 +17,7 @@ export function getMenuList (sortIndex) {
 }
 
 export function searchMenu (queryParams, queryParamsIndex) {
-  const url = '/api/menu'
+  const url = '/menu'
   const data = Object.assign({}, queryParams, queryParamsIndex)
   return API.GET(url, {
     params: data
