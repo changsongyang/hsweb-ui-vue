@@ -13,13 +13,7 @@ dev: {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
-      '/api': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
+    proxyTable: {}
       }
     },
 ```
@@ -28,9 +22,11 @@ dev: {
 
 ``` bash
 # install dependencies
+# 安装依赖
 npm install
 
 # serve with hot reload at localhost:8080
+# 本地开发环境运行
 npm run dev
 
 # build for production with minification
