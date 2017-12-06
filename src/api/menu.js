@@ -1,4 +1,4 @@
-import axios from 'axios'
+import * as API from './index'
 
 export function getMenuList (sortIndex) {
   const url = '/api/menu'
@@ -9,9 +9,19 @@ export function getMenuList (sortIndex) {
     sortField: sortIndex,
     sortOrder: ''
   })
-  return axios.get(url, {
+  return API.GET(url, {
     params: data
   }).then((res) => {
-    return Promise.resolve(res.data)
+    return Promise.resolve(JSON.parse(res))
+  })
+}
+
+export function searchMenu (queryParams, queryParamsIndex) {
+  const url = '/api/menu'
+  const data = Object.assign({}, queryParams, queryParamsIndex)
+  return API.GET(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(JSON.parse(res))
   })
 }

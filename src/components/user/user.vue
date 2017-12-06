@@ -123,7 +123,7 @@
         users: [],
         formLabelWidth: '80px',
         total: 0,
-        page: 1,
+        pageIndex: 1,
         pageSize: 10,
         currentRow: null
       }
@@ -233,7 +233,7 @@
       },
       search () {
         this.total = 0
-        this.page = 1
+        this.pageIndex = 1
         this.searchUser()
       },
       searchUser () {
@@ -242,7 +242,7 @@
           name: encodeQueryParam(that.searchForm)
         }
         let queryParamsPage = {
-          pageIndex: that.page,
+          pageIndex: that.pageIndex,
           pageSize: that.pageSize,
           sortField: '',
           sortOrder: ''

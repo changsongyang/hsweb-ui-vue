@@ -1,61 +1,50 @@
 <template>
-  <el-table :data='tableData' style='width: 100%' @expand='rowExpand'>
+  <el-table :data='tableData' border highlight-current-row @current-change="currentChange" style='width: 100%' @expand='rowExpand'>
     <el-table-column type='expand'>
       <template slot-scope='props'>
-        <el-table :data='props.row.children' style='width: 100%'>
-          <el-table-column label='图标' prop='icon'>
-          </el-table-column>
-          <el-table-column label='权限ID' prop='permissionId'>
-          </el-table-column>
-          <el-table-column label='菜单名称' prop='name'>
-          </el-table-column>
-          <el-table-column label='URL' prop='url'>
-          </el-table-column>
-          <el-table-column label='是否启用' prop=''>
-          </el-table-column>
-          <el-table-column label='排序序号' prop='sortIndex'>
-          </el-table-column>
-          <el-table-column label='描述' prop='describe'>
-          </el-table-column>
-          <el-table-column label='操作' prop='action'>
+        <el-table :data='props.row.children' border highlight-current-row @current-change="currentChange" style='width: 100%'>
+          <el-table-column label='图标' prop='icon' align="center"></el-table-column>
+          <el-table-column label='权限ID' prop='permissionId' align="center"></el-table-column>
+          <el-table-column label='菜单名称' prop='name' align="center"></el-table-column>
+          <el-table-column label='URL' prop='url' align="center"></el-table-column>
+          <el-table-column label='是否启用' prop='' align="center"></el-table-column>
+          <el-table-column label='排序序号' prop='sortIndex' align="center"></el-table-column>
+          <el-table-column label='描述' prop='describe' align="center"></el-table-column>
+          <el-table-column label='操作' prop='action' align="center">
+            <template slot-scope="scope">
+              <el-tooltip class="item" effect="light" content="添加子菜单" placement="bottom-start">
+                <el-button size="mini" type="primary" icon="el-icon-plus"></el-button>
+              </el-tooltip>
+              <el-tooltip class="item" effect="light" content="删除菜单" placement="bottom-start">
+                <el-button size="mini" type="primary" icon="el-icon-delete"></el-button>
+              </el-tooltip>
+            </template>
           </el-table-column>
         </el-table>
       </template>
     </el-table-column>
-    <el-table-column label='图标' prop='icon'>
-    </el-table-column>
-    <el-table-column label='权限ID' prop='permissionId'>
-    </el-table-column>
-    <el-table-column label='菜单名称' prop='name'>
-    </el-table-column>
-    <el-table-column label='URL' prop='url'>
-    </el-table-column>
-    <el-table-column label='是否启用' prop=''>
-    </el-table-column>
-    <el-table-column label='排序序号' prop='sortIndex'>
-    </el-table-column>
-    <el-table-column label='描述' prop='describe'>
-    </el-table-column>
-    <el-table-column label='操作' prop='action'>
+    <el-table-column label='图标' prop='icon' align="center"></el-table-column>
+    <el-table-column label='权限ID' prop='permissionId' align="center"></el-table-column>
+    <el-table-column label='菜单名称' prop='name' align="center"></el-table-column>
+    <el-table-column label='URL' prop='url' align="center"></el-table-column>
+    <el-table-column label='是否启用' prop='' align="center"></el-table-column>
+    <el-table-column label='排序序号' prop='sortIndex' align="center"></el-table-column>
+    <el-table-column label='描述' prop='describe' align="center"></el-table-column>
+    <el-table-column label='操作' prop='action' align="center">
+      <template slot-scope="scope">
+        <el-tooltip class="item" effect="light" content="添加子菜单" placement="bottom-start">
+          <el-button size="mini" type="primary" icon="el-icon-plus"></el-button>
+        </el-tooltip>
+        <el-tooltip class="item" effect="light" content="删除菜单" placement="bottom-start">
+          <el-button size="mini" type="primary" icon="el-icon-delete"></el-button>
+        </el-tooltip>
+      </template>
     </el-table-column>
   </el-table>
 </template>
 
 <script type='text/ecmascript-6'>
-  class TableSourePri {
-    constructor ({describe, icon, id, name, parentId, path, permissionId, sortIndex, status, url}) {
-      this.describe = describe
-      this.icon = icon
-      this.id = id
-      this.name = name
-      this.path = path
-      this.parentId = parentId
-      this.permissionId = permissionId
-      this.sortIndex = sortIndex
-      this.status = status
-      this.url = url
-    }
-  }
+  import {TableSourePri} from 'common/js/classes'
 
   export default{
     props: {
@@ -76,7 +65,8 @@
           status: '',
           url: '',
           children: []
-        }
+        },
+        currentRow: null
       }
     },
     watch: {
@@ -96,8 +86,8 @@
             this.child.url = item.url
             for (let tableSource of this.tableSoureData) {
               let tableSourcePri1 = new TableSourePri(tableSource)
-              if (tableSourcePri1.sortIndex > 10) {
-                debugger
+              if (tableSourcePri1.sortIndex >= 10) {
+               // debugger
                 if (tableSource.sortIndex.toString().startsWith(tableSourcePri.sortIndex.toString())) {
                   this.child.children.push(Object.assign({}, tableSource))
                 }
@@ -123,8 +113,11 @@
     },
     methods: {
       rowExpand: function (row) {
-//        this.listChildren = row.children;
-        //       console.log(row)
+       // this.listChildren = row.children;
+       // console.log(row)
+      },
+      currentChange (val) {
+        this.currentRow = val
       }
     }
   }
