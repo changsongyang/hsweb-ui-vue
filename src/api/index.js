@@ -4,7 +4,7 @@ import Vue from 'vue'
 let v = new Vue()
 
 axios.defaults.withCredentials = true
-// axios.defaults.baseURL = '/api'
+axios.defaults.baseURL = '/api'
 axios.create({
   headers: {'content-type': 'application/x-www-form-urlencoded'}
 })
@@ -33,4 +33,12 @@ export const GET = (url, params) => {
 
 export const PUT = (url, params) => {
   return axios.put(url, params).then(res => res.data)
+}
+
+export const DELETE = (url, params) => {
+  return axios.delete(url, params).then(res => res.data)
+}
+
+export const PATCH = (url, params) => {
+  return axios.patch(url, params).then(res => res.data)
 }

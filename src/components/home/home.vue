@@ -10,6 +10,10 @@
             <div class="tools" @click.prevent="collapse"></div>
           </el-col>
 
+          <el-button plain type="danger" @click="open">
+            API文档
+          </el-button>
+
           <el-col :span="4" class="userinfo">
             <el-dropdown trigger="hover">
               <span class="userinfo-inner">
@@ -79,6 +83,9 @@
       })
     },
     methods: {
+      open () {
+        window.open('/api/swagger-ui.html')
+      },
       // 折叠导航栏
       collapse () {
         this.collapsed = !this.collapsed
@@ -90,42 +97,42 @@
 <style scoped lang="scss">
   /*@import "common/iconfont.css";*/
 
-  .container{
+  .container {
     position: absolute;
     top: 0;
     bottom: 0;
     width: 100%;
     border: 1px solid #eee;
 
-    .header{
+    .header {
       background-color: cornflowerblue;
       height: 70px;
       padding: 0px;
       line-height: 70px;
 
-      .logo{
+      .logo {
         height: 60px;
         font-size: 22px;
         padding-left: 20px;
-        border-color: rgba(238,241,146,0.3);
+        border-color: rgba(238, 241, 146, 0.3);
         color: white;
 
-        img{
+        img {
           width: 40px;
           float: left;
           margin: 10px 10px 10px 18px;
         }
       }
 
-      .logo-width{
+      .logo-width {
         width: 230px;
       }
 
-      .logo-collapse-width{
+      .logo-collapse-width {
         width: 60px;
       }
 
-      .tools{
+      .tools {
         padding: 0px 23px;
         width: 14px;
         height: 60px;
@@ -133,16 +140,16 @@
         cursor: pointer;
       }
 
-      .userinfo{
+      .userinfo {
         bottom: 60px;
         text-align: right;
         padding-right: 35px;
         float: right;
 
-        .userinfo-inner{
+        .userinfo-inner {
           cursor: pointer;
 
-          img{
+          img {
             width: 40px;
             height: 40px;
             border-radius: 20px;
@@ -154,14 +161,14 @@
       }
     }
 
-    .aside{
+    .aside {
       min-width: 50px;
       background-color: rgb(238, 241, 246);
       &::-webkit-scrollbar {
         display: none;
       }
 
-      &.showSidebar{
+      &.showSidebar {
         overflow-x: hidden;
         overflow-y: auto;
       }
@@ -174,15 +181,15 @@
         line-height: 30px;
       }
 
-     /* .menu-collapsed{
-        width: 60px;
-      }
+      /* .menu-collapsed{
+         width: 60px;
+       }
 
-      .menu-expanded{
-        width: 230px;
-      }
-*/
-      .el-menu{
+       .menu-expanded{
+         width: 230px;
+       }
+ */
+      .el-menu {
         height: 100%;
         height: -moz-calc(100% - 80px);
         height: -webkit-calc(100% - 80px);
@@ -212,6 +219,7 @@
 
     }
   }
+
   /*.container .header {
     background-color: cornflowerblue;
     height: 70px;

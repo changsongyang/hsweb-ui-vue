@@ -233,6 +233,7 @@
           if (res.status === statusCode) {
             that.total = res.total
             that.data = res.result.data
+            this.roles = that.data
           }
         }).catch((error) => {
           console.log(error)

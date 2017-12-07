@@ -16,6 +16,10 @@ export function getMenuList (sortIndex) {
   })
 }
 
+export function addMenu (params) {
+  return API.PATCH('/menu', params)
+}
+
 export function searchMenu (queryParams, queryParamsIndex) {
   const url = '/menu'
   const data = Object.assign({}, queryParams, queryParamsIndex)
@@ -24,4 +28,8 @@ export function searchMenu (queryParams, queryParamsIndex) {
   }).then((res) => {
     return Promise.resolve(JSON.parse(res))
   })
+}
+
+export function delMenu (id) {
+  return API.DELETE(`/menu/${id}`)
 }

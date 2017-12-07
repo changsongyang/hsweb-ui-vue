@@ -128,24 +128,13 @@
         currentRow: null
       }
     },
-    mounted () {
+    created () {
       this._getUerList()
     },
+    mounted () {
+      this.search()
+    },
     methods: {
-      /* encodeQueryParam (data) {
-        var queryParam = {}
-        var index = 0
-        for (var f in data) {
-          if (data[f] === '') continue
-          if (f.indexOf('$LIKE') !== -1 && data[f].indexOf('%') === -1) data[f] = '%' + data[f] + '%'
-          if (f.indexOf('$START') !== -1) data[f] = '%' + data[f]
-          if (f.indexOf('$END') !== -1) data[f] = data[f] + '%'
-          queryParam['terms[' + (index) + '].column'] = f
-          queryParam['terms[' + (index) + '].value'] = data[f]
-          index++
-        }
-        return queryParam
-      }, */
       _getUerList () {
         getUser().then((res) => {
           if (res.status === statusCode) {
@@ -251,6 +240,7 @@
           if (res.status === statusCode) {
             that.total = res.total
             that.data = res.result.data
+            this.users = that.data
           }
         }).catch((error) => {
           console.log(error)

@@ -2,7 +2,7 @@
 
 > A Vue.js project
 
-项目启动默认是http://localhost:8082。
+项目启动默认是http://localhost:8082
 
 可以在`config/index.js`里修改端口`port: process.env.PORT || 8082`
 
