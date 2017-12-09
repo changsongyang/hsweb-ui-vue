@@ -32,3 +32,7 @@ export function searchPermiss (queryParams, queryParamsIndex) {
 export function delPermiss (id) {
   return API.DELETE(`/permission/${id}`)
 }
+
+export function editPermiss (id, params) {
+  return API.PUT(`/permission/${id}`, params)
+}

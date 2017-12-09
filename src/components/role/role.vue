@@ -72,12 +72,19 @@
       </el-table-column>
     </el-table>
 
-    <pagin></pagin>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="10"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="500">
+    </el-pagination>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Pagin from 'base/pagin/pagin'
   import Breadcr from 'base/breadcr/breadcr'
   import { getRoleList, addRole, editRole, searchRole } from 'api/role'
   import { statusCode } from 'common/js/config'
@@ -124,7 +131,8 @@
         page: 1,
         pageSize: 10,
         currentRow: null,
-        formLabelWidth: '120px'
+        formLabelWidth: '120px',
+        currentPage: 1
       }
     },
     created () {
@@ -245,10 +253,16 @@
       },
       currentChange (val) {
         this.currentRow = val
+      },
+      handleCurrentChange (val) {
+        this.pageIndex = val
+        this.search()
+      },
+      handleSizeChange (val) {
+        console.log(`每页 ${val} 条`)
       }
     },
     components: {
-      Pagin,
       Breadcr
     }
   }

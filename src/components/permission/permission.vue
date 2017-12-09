@@ -4,16 +4,121 @@
     <el-dialog title="添加权限" :visible.sync="dialogFormVisible" center>
       <el-tabs type="border-card" v-model="activeName">
         <el-tab-pane label="基本信息" name="first">
-          <permission-info :formData="addForm" ref="addForm"></permission-info>
+          <div>
+            <el-form :model='addForm' ref="addForm">
+              <el-form-item label='权限标识(ID):' :label-width='formLabelWidth'>
+                <el-input v-model='addForm.id' placeholder='只能由字母数字下划线组成' auto-complete='off'
+                          style='width: 240px'></el-input>
+              </el-form-item>
+              <el-form-item label='权限名称:' :label-width='formLabelWidth'>
+                <el-input v-model='addForm.name' auto-complete='off' style='width: 240px'></el-input>
+              </el-form-item>
+              <el-form-item label='备注：' :label-width='formLabelWidth'>
+                <el-input type='textarea' v-model='addForm.describe'></el-input>
+              </el-form-item>
+              <el-form-item label='支持的数据权限控制方式:' :label-width='formLabelWidth'>
+                <el-select v-model='id' multiple placeholder='请选择'>
+                  <el-option v-for='item in allSupportDataAccessTypes' :key='item.id' :label='item.label' :value='item.id'></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+
+            <el-table :data='actions' highlight-current-row @current-change='currentChange' height='400' border
+                      style='width: 100%'>
+              <el-table-column prop='action' label='操作类型' align='center'></el-table-column>
+              <el-table-column prop='describe' label='描述' align='center'></el-table-column>
+              <el-table-column prop='defaultCheck' label='默认选中' align='center'></el-table-column>
+              <el-table-column prop='renderAction' label='操作' align='center'>
+                <template slot-scope='scope'>
+                  <el-tooltip class="item" effect="light" content="添加" placement="bottom-start">
+                    <el-button size="mini" type="primary" icon="el-icon-plus"></el-button>
+                  </el-tooltip>
+                  <el-tooltip class="item" effect="light" content="删除" placement="bottom-start">
+                    <el-button size="mini" type="danger" icon="el-icon-delete"></el-button>
+                  </el-tooltip>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
         </el-tab-pane>
 
         <el-tab-pane label="数据视图" name="second">
-          <permission-view :formData="addForm" ref="addForm"></permission-view>
+          <el-table :data="viewData" highlight-current-row @current-change="currentChange" height="500" border
+                    style="width: 100%">
+            <el-table-column prop="name" label="字段" align="center"></el-table-column>
+            <el-table-column prop="describe" label="描述" align="center"></el-table-column>
+            <el-table-column prop="renderAction" label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button size="mini" type="danger">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
         </el-tab-pane>
       </el-tabs>
 
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="savePermiss">保存</el-button>
+      </div>
+    </el-dialog>
+
+    <!--编辑页面-->
+    <el-dialog title="编辑权限" :visible.sync="editFormVisible" center>
+      <el-tabs type="border-card" v-model="activeName">
+        <el-tab-pane label="基本信息" name="first">
+          <div>
+            <el-form :model='editForm' ref="editForm">
+              <el-form-item label='权限标识(ID):' :label-width='formLabelWidth'>
+                <el-input v-model='editForm.id' placeholder='只能由字母数字下划线组成' auto-complete='off'
+                          style='width: 240px'></el-input>
+              </el-form-item>
+              <el-form-item label='权限名称:' :label-width='formLabelWidth'>
+                <el-input v-model='editForm.name' auto-complete='off' style='width: 240px'></el-input>
+              </el-form-item>
+              <el-form-item label='备注：' :label-width='formLabelWidth'>
+                <el-input type='textarea' v-model='editForm.describe'></el-input>
+              </el-form-item>
+              <el-form-item label='支持的数据权限控制方式:' :label-width='formLabelWidth'>
+                <el-select v-model='id' multiple placeholder='请选择'>
+                  <el-option v-for='item in allSupportDataAccessTypes' :key='item.id' :label='item.label' :value='item.id'></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+
+            <el-table :data='actions' highlight-current-row @current-change='currentChange' height='400' border
+                      style='width: 100%'>
+              <el-table-column prop='action' label='操作类型' align='center'></el-table-column>
+              <el-table-column prop='describe' label='描述' align='center'></el-table-column>
+              <el-table-column prop='defaultCheck' label='默认选中' align='center'></el-table-column>
+              <el-table-column prop='renderAction' label='操作' align='center'>
+                <template slot-scope='scope'>
+                  <el-tooltip class="item" effect="light" content="添加" placement="bottom-start">
+                    <el-button size="mini" type="primary" icon="el-icon-plus"></el-button>
+                  </el-tooltip>
+                  <el-tooltip class="item" effect="light" content="删除" placement="bottom-start">
+                    <el-button size="mini" type="danger" icon="el-icon-delete"></el-button>
+                  </el-tooltip>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+        </el-tab-pane>
+
+        <el-tab-pane label="数据视图" name="second">
+          <el-table :data="viewData" highlight-current-row @current-change="currentChange" height="500" border
+                    style="width: 100%">
+            <el-table-column prop="name" label="字段" align="center"></el-table-column>
+            <el-table-column prop="describe" label="描述" align="center"></el-table-column>
+            <el-table-column prop="renderAction" label="操作" align="center">
+              <template slot-scope="scope">
+                <el-button size="mini" type="danger">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="editPermiss">保存</el-button>
       </div>
     </el-dialog>
 
@@ -37,7 +142,8 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="permissions" highlight-current-row @current-change="currentChange" height="500" border style="width: 100%">
+    <el-table :data="permissions" highlight-current-row @current-change="currentChange" height="500" border
+              style="width: 100%">
       <el-table-column type="index" align="center"></el-table-column>
       <el-table-column sortable prop="id" label="ID" align="center"></el-table-column>
       <el-table-column sortable prop="name" label="名称" align="center"></el-table-column>
@@ -45,24 +151,29 @@
       <el-table-column prop="describe" label="备注" align="center"></el-table-column>
       <el-table-column prop="action" label="操作" align="center">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary">编辑</el-button>
+          <el-button size="mini" type="primary" @click="showEditPermiss(scope.$index,scope.row)">编辑</el-button>
           <el-button size="mini" type="danger" @click="delPermiss(scope.$index,scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagin></pagin>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="[10, 20, 30, 40]"
+      :page-size="100"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="500">
+    </el-pagination>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Pagin from 'base/pagin/pagin'
   import Breadcr from 'base/breadcr/breadcr'
-  import { getPermissList, searchPermiss, delPermiss } from 'api/permission'
+  import { getPermissList, searchPermiss, delPermiss, editPermiss, addPermiss } from 'api/permission'
   import { statusCode } from 'common/js/config'
-  import {encodeQueryParam} from 'common/js/utils'
-  import PermissionInfo from 'components/permission-info/permission-info'
-  import PermissionView from 'components/permission-view/permission-view'
+  import { encodeQueryParam } from 'common/js/utils'
 
   export default{
     data () {
@@ -76,26 +187,87 @@
         permissions: [],
         // 添加相关数据
         dialogFormVisible: false,
+        allSupportDataAccessTypes: [
+          {
+            id: 'DENY_FIELDS',
+            label: '禁止访问字段'
+          },
+          {
+            id: 'ONLY_SELF',
+            label: '仅限本人'
+          },
+          {
+            id: 'POSITION_SCOPE',
+            label: '仅限本人及下属'
+          },
+          {
+            id: 'DEPARTMENT_SCOPE',
+            label: '所在部门'
+          },
+          {
+            id: 'ORG_SCOPE',
+            label: '所在机构'
+          },
+          {
+            id: 'CUSTOM_SCOPE_ORG_SCOPE_',
+            label: '自定义设置-机构'
+          },
+          {
+            id: 'CUSTOM_SCOPE_DEPARTMENT_SCOPE_',
+            label: '自定义设置-部门'
+          },
+          {
+            id: 'CUSTOM_SCOPE_POSITION_SCOPE_',
+            label: '自定义设置-岗位'
+          }
+        ],
         addForm: {
           id: '',
           name: '',
-          describe: ''
+          describe: '',
+          optionalFields: [],
+          supportDataAccessTypes: [],
+          action: []
         },
         addFormRules: {
           id: [{required: true, message: '请输入权限标识(ID)', trigger: 'blur'}],
           name: [{required: true, message: '请输入姓名', trigger: 'blur'}],
           describe: [{required: true, message: '备注', trigger: 'blur'}]
         },
+        id: [],
+        actions: [
+          {'action': 'query', 'describe': '查询列表', defaultCheck: true},
+          {'action': 'get', 'describe': '查询明细', defaultCheck: true},
+          {'action': 'add', 'describe': '新增', defaultCheck: true},
+          {'action': 'update', 'describe': '修改', defaultCheck: true},
+          {'action': 'delete', 'describe': '删除', defaultCheck: false}
+        ],
+        viewData: [],
+        // 编辑相关数据
+        editFormVisible: false,   // 编辑页面是否显示
+        editFormRules: {
+          id: [{required: true, message: '请输入权限标识(ID)', trigger: 'blur'}],
+          name: [{required: true, message: '请输入姓名', trigger: 'blur'}],
+          describe: [{required: true, message: '备注', trigger: 'blur'}]
+        },
+        editForm: {
+          id: '',
+          name: '',
+          describe: '',
+          optionalFields: [],
+          supportDataAccessTypes: [],
+          actions: []
+        },
         currentRow: null,
         total: 0,
-        pageIndex: 1,
+        page: 1,
         pageSize: 10,
-        value: '',
         formLabelWidth: '183px',
-        activeName: 'first'
+        activeName: 'first',
+        currentPage: 1
       }
     },
-    mounted () {
+    created () {
       this._getPermissList()
     },
     computed: {
@@ -113,7 +285,7 @@
       },
       search () {
         this.total = 0
-        this.pageIndex = 1
+        this.page = 1
         this.searchPermiss()
       },
       searchPermiss () {
@@ -122,7 +294,7 @@
           name: encodeQueryParam(that.searchForm)
         }
         let queryParamsPage = {
-          pageIndex: that.pageIndex,
+          pageIndex: that.page,
           pageSize: that.pageSize,
           sortField: '',
           sortOrder: ''
@@ -167,36 +339,37 @@
           })
         })
       },
-      savePermiss () {
-//        this.dialogFormVisible = true
-//        this.addForm = {
-//          id: '',
-//          name: '',
-//          describe: ''
-//        }
-      },
       showAndPermiss () {
-        /* let that = this
-        console.log(this.$refs.addForm)
-       // debugger
+        this.dialogFormVisible = true
+        this.addForm = {
+          id: '',
+          name: '',
+          describe: '',
+          optionalFields: [],
+          supportDataAccessTypes: this.id,
+          actions: this.actions
+        }
+      },
+      savePermiss () {
+        let that = this
         this.$refs.addForm.validate((valid) => {
           if (valid) {
             this.$confirm('确定保存吗？', '提示', {}).then(() => {
-              let userParams = Object.assign({}, this.addForm)
-              addPermiss(userParams).then((res) => {
+              let params = Object.assign({}, this.addForm)
+              addPermiss(params).then((res) => {
                 if (res.status === statusCode) {
                   that.$message.success({
-                    message: '添加用户成功',
+                    message: '添加权限成功',
                     duration: 2000
                   })
                   that.$refs['addForm'].resetFields()
                   that.dialogFormVisible = false
+                  this._getPermissList()
                 } else {
                   that.$message.error({
-                    message: '添加用户失败',
+                    message: '添加权限失败',
                     duration: 2000
                   })
-                  this._getUerList()
                 }
               }).catch((error) => {
                 console.log(error)
@@ -208,15 +381,55 @@
               })
             })
           }
-        }) */
+        })
         this.dialogFormVisible = true
+      },
+      handleCurrentChange (val) {
+        this.pageIndex = val
+        this.search()
+      },
+      handleSizeChange (val) {
+        console.log(`每页 ${val} 条`)
+      },
+      showEditPermiss (index, row) {
+        this.editFormVisible = true
+        this.editForm = Object.assign(this.editForm, row)
+      },
+      editPermiss () {
+        let that = this
+       // debugger
+       // console.log(this.$refs.editForm)
+        this.$refs.editForm.validate((valid) => {
+          if (valid) {
+            let params = Object.assign({}, this.editForm)
+            editPermiss(params.id, params).then((result) => {
+              if (result.status === statusCode) {
+                that.$message.success({
+                  message: '修改成功',
+                  duration: 2000
+                })
+                that.$refs['editForm'].resetFields()
+                that.editFormVisible = false
+                this._getPermissList()
+              } else {
+                that.$message.error({
+                  message: '修改失败',
+                  duration: 2000
+                })
+              }
+            }).catch((error) => {
+              console.log(error)
+              that.$message.error({
+                message: '请求出现异常',
+                duration: 2000
+              })
+            })
+          }
+        })
       }
     },
     components: {
-      Pagin,
-      Breadcr,
-      PermissionInfo,
-      PermissionView
+      Breadcr
     }
   }
 </script>

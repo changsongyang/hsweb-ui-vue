@@ -192,10 +192,8 @@
         let that = this
         this.$refs.editForm.validate((valid) => {
           if (valid) {
-//            debugger
             let userParams = Object.assign({}, this.editForm)
             editUser(userParams.id, userParams).then((result) => {
-//              alert(result)
               if (result.status === statusCode) {
                 that.$message.success({
                   message: '修改成功',
