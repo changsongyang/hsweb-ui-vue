@@ -1,53 +1,56 @@
 <template>
-  <div class="menu-wrap">
+  <div class='menu-wrap'>
     <!--添加菜单页面-->
-    <el-dialog title="添加菜单" :visible.sync="dialogTableVisible" center>
+    <el-dialog title='添加菜单' :visible.sync='dialogTableVisible' center>
 
-      <el-form :model="addForm" ref="addForm">
-        <el-form-item label="图标：" :label-width="formLabelWidth">
-          <el-input v-model="addForm.icon" auto-complete="off" style="width: 240px"></el-input>
+      <el-form :model='addForm' ref='addForm'>
+        <el-form-item label='图标：' :label-width='formLabelWidth'>
+          <el-input v-model='addForm.icon' auto-complete='off' style='width: 240px'></el-input>
         </el-form-item>
-        <el-form-item label="权限ID：" :label-width="formLabelWidth">
-          <el-input v-model="addForm.permissionId" auto-complete="off" style="width: 240px"></el-input>
+        <el-form-item label='权限ID：' :label-width='formLabelWidth'>
+          <el-input v-model='addForm.permissionId' auto-complete='off' style='width: 240px'></el-input>
         </el-form-item>
-        <el-form-item label="菜单名称：" :label-width="formLabelWidth">
-          <el-input v-model="addForm.name" auto-complete="off" style="width: 240px"></el-input>
+        <el-form-item label='菜单名称：' :label-width='formLabelWidth'>
+          <el-input v-model='addForm.name' auto-complete='off' style='width: 240px'></el-input>
         </el-form-item>
-        <el-form-item label="URL：" :label-width="formLabelWidth">
-          <el-input v-model="addForm.url" auto-complete="off" style="width: 240px"></el-input>
+        <el-form-item label='URL：' :label-width='formLabelWidth'>
+          <el-input v-model='addForm.url' auto-complete='off' style='width: 240px'></el-input>
         </el-form-item>
-        <el-form-item label="排序序号：" :label-width="formLabelWidth">
-          <el-input v-model="addForm.sortIndex" auto-complete="off" style="width: 240px"></el-input>
+        <el-form-item label='是否启用：' :label-width='formLabelWidth'>
+          <el-input v-model='addForm.enabled' auto-complete='off' style='width: 240px'></el-input>
         </el-form-item>
-        <el-form-item label="描述：" :label-width="formLabelWidth">
-          <el-input type="textarea" v-model="addForm.describe"></el-input>
+        <el-form-item label='排序序号：' :label-width='formLabelWidth'>
+          <el-input v-model='addForm.sortIndex' auto-complete='off' style='width: 240px'></el-input>
+        </el-form-item>
+        <el-form-item label='描述：' :label-width='formLabelWidth'>
+          <el-input type='textarea' v-model='addForm.describe'></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="saveMenu">保存</el-button>
+      <div slot='footer' class='dialog-footer'>
+        <el-button type='primary' @click='saveMenu'>保存</el-button>
       </div>
     </el-dialog>
 
-    <breadcr :meName="meName"></breadcr>
+    <breadcr :meName='meName'></breadcr>
 
-    <el-form :inline="true" :model="searchForm">
-      <el-form-item label="关键字">
-        <el-input size="small" v-model="searchForm.keyword"></el-input>
+    <el-form :inline='true' :model='searchForm'>
+      <el-form-item label='关键字'>
+        <el-input size='small' v-model='searchForm.keyword'></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="small" @click="search">搜索</el-button>
+        <el-button type='primary' icon='el-icon-search' size='small' @click='search'>搜索</el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" size="small" @click="showAndMenu">添加菜单</el-button>
+        <el-button type='primary' size='small' @click='showAndMenu'>添加菜单</el-button>
       </el-form-item>
     </el-form>
 
-    <parent-children :tableSoureData="tableSoureData" :showData="showData" :customerQueryData="customerQueryData"></parent-children>
+    <parent-children :tableSoureData='tableSoureData' :showData='showData' :customerQueryData='customerQueryData'></parent-children>
   </div>
 
 </template>
 
-<script type="text/ecmascript-6">
+<script type='text/ecmascript-6'>
   import { getMenuList, addMenu, searchMenu } from 'api/menu'
   import { statusCode } from 'common/js/config'
   import { queryParam } from 'common/js/utils'
@@ -71,6 +74,7 @@
           permissionId: '',
           name: '',
           url: '',
+          enabled: '',
           sortIndex: '',
           describe: ''
         },

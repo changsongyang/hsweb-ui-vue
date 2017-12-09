@@ -232,8 +232,8 @@
         searchRole(queryParams.name, queryParamsPage).then((res) => {
           if (res.status === statusCode) {
             that.total = res.total
-            that.data = res.result.data
-            this.roles = that.data
+            this.roles = res.result.data
+           // this.roles = that.data
           }
         }).catch((error) => {
           console.log(error)

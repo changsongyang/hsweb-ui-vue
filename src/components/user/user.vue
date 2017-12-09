@@ -165,12 +165,12 @@
                   })
                   that.$refs['addForm'].resetFields()
                   that.dialogFormVisible = false
+                  that.search()
                 } else {
                   that.$message.error({
                     message: '添加用户失败',
                     duration: 2000
                   })
-                  this._getUerList()
                 }
               }).catch((error) => {
                 console.log(error)
@@ -239,8 +239,8 @@
         searchUser(queryParams.name, queryParamsPage).then((res) => {
           if (res.status === statusCode) {
             that.total = res.total
-            that.data = res.result.data
-            this.users = that.data
+            this.users = res.result.data
+           // this.users = that.data
           }
         }).catch((error) => {
           console.log(error)

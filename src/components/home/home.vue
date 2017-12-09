@@ -10,9 +10,7 @@
             <div class="tools" @click.prevent="collapse"></div>
           </el-col>
 
-          <el-button plain type="danger" @click="open">
-            API文档
-          </el-button>
+          <el-button plain type="danger" @click="open">API文档</el-button>
 
           <el-col :span="4" class="userinfo">
             <el-dropdown trigger="hover">
