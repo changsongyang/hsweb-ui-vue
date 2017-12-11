@@ -5,7 +5,7 @@ import Menu from 'components/menu/menu'
 import Permission from 'components/permission/permission'
 import Role from 'components/role/role'
 import User from 'components/user/user'
-import Agency from 'components/agency/agency'
+import Organiz from 'components/organiz/organiz'
 import InSetting from 'components/inte-setting/in-setting'
 import Login from 'components/login/login'
 
@@ -57,9 +57,9 @@ let router = new Router({
       iconCls: 'el-icon-menu',
       children: [
         {
-          path: '/agency',
+          path: '/organiz',
           name: '机构管理',
-          component: Agency
+          component: Organiz
         },
         {
           path: '/setting',

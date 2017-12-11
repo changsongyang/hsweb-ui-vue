@@ -131,9 +131,9 @@
     created () {
       this._getUerList()
     },
-    mounted () {
+    /* mounted () {
       this.search()
-    },
+    }, */
     methods: {
       _getUerList () {
         getUser().then((res) => {
