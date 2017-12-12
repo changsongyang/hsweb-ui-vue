@@ -45,7 +45,8 @@
       </el-form-item>
     </el-form>
 
-    <parent-children :tableSoureData='tableSoureData' :showData='showData' :customerQueryData='customerQueryData'></parent-children>
+    <!--<parent-children :tableSoureData='tableSoureData' :showData='showData' :customerQueryData='customerQueryData'></parent-children>-->
+    <tree-grid :columns="columns" :tree-structure="true" :data-source="dataSource" :treeStructure="true"></tree-grid>
   </div>
 
 </template>
@@ -56,6 +57,7 @@
   import { queryParam } from 'common/js/utils'
   import Breadcr from 'base/breadcr/breadcr'
   import ParentChildren from 'base/basetable/parent_children'
+  import TreeGrid from 'base/basetable/TreeGrid'
 
   export default{
     data () {
@@ -86,17 +88,66 @@
         total: 0,
         pageIndex: 0,
         pageSize: 10,
-        formLabelWidth: '120px'
+        formLabelWidth: '120px',
+        columns: [
+          {
+            text: '图标',
+            dataIndex: 'icon'
+          },
+          {
+            text: '权限ID',
+            dataIndex: 'permissionId'
+          },
+          {
+            text: '菜单名称',
+            dataIndex: 'name'
+          },
+          {
+            text: 'URL',
+            dataIndex: 'url'
+          },
+          {
+            text: '是否启用',
+            dataIndex: ''
+          },
+          {
+            text: '排序序号',
+            dataIndex: 'sortIndex'
+          },
+          {
+            text: '描述',
+            dataIndex: 'describe'
+          }
+        ],
+        dataSource: []
       }
     },
     created () {
       this._getMenuList()
     },
     methods: {
+      _arrayToTreeArray (data, root) {
+        let r = []
+        let o = []
+        data.forEach(a => {
+          a.children = o[a.id] && o[a.id].children
+          o[a.id] = a
+          if (a.parentId === root || typeof (a.parentId) === 'undefined') {
+            r.push(a)
+//            a.children = []
+          } else {
+            o[a.parentId] = o[a.parentId] || []
+            o[a.parentId].children = o[a.parentId].children || []
+            o[a.parentId].children.push(a)
+          }
+        })
+        return r
+      },
       _getMenuList () {
         getMenuList().then((res) => {
           if (res.status === statusCode) {
             this.tableSoureData = Array.from(res.result.data)
+            this.dataSource = Array.from(this._arrayToTreeArray(res.result.data, '-1'))
           }
         })
       },
@@ -175,7 +226,8 @@
     },
     components: {
       Breadcr,
-      ParentChildren
+      ParentChildren,
+      TreeGrid
     }
   }
 </script>

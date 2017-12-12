@@ -31,3 +31,21 @@ export function queryParam (data) {
   }
   return queryParam
 }
+
+export function arrayToTreeArray (data, root) {
+  let r = []
+  let o = []
+  data.forEach(a => {
+    a.children = o[a.id] && o[a.id].children
+    o[a.id] = a
+    if (a.parentId === root || typeof (a.parentId) === 'undefined') {
+      r.push(a)
+//            a.children = []
+    } else {
+      o[a.parentId] = o[a.parentId] || []
+      o[a.parentId].children = o[a.parentId].children || []
+      o[a.parentId].children.push(a)
+    }
+  })
+  return r
+}
