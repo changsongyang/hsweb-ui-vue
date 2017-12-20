@@ -35,7 +35,7 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="orgs" stripe height="500" border style="width: 100%">
+    <!--<el-table :data="orgs" stripe height="500" border style="width: 100%">
       <el-table-column sortable prop="index" type="index" label="#" align="center" width="100"></el-table-column>
       <el-table-column sortable prop="name" label="机构名称" align="center"></el-table-column>
       <el-table-column sortable prop="fullName" label="机构全称" align="center"></el-table-column>
@@ -45,7 +45,10 @@
           <el-button size="mini" type="primary" @click="showAdd">添加子结构</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </el-table>-->
+
+    <tree-grid :columns="columns" :columntype="true" :tree-structure="true" :content="content"
+               :isadd="true" @addMenu="showAdd" :data-source="orgs"></tree-grid>
   </div>
 </template>
 
@@ -53,7 +56,8 @@
   import Breadcr from 'base/breadcr/breadcr'
   import { getOrg, addOrg, searchOrg, addAll } from 'api/organiz'
   import { statusCode } from 'common/js/config'
-  import { queryParam } from 'common/js/utils'
+  import { queryParam, arrayToTreeArray } from 'common/js/utils'
+  import TreeGrid from 'base/basetable/TreeGrid'
 
   export default{
     data () {
@@ -80,7 +84,22 @@
         loading: true,
         total: 0,
         pageIndex: 1,
-        pageSize: 10
+        pageSize: 10,
+        columns: [
+          {
+            text: '机构名称',
+            dataIndex: 'name'
+          },
+          {
+            text: '机构全称',
+            dataIndex: 'fullName'
+          },
+          {
+            text: '机构编码',
+            dataIndex: 'code'
+          }
+        ],
+        content: '添加子机构'
       }
     },
     created () {
@@ -90,7 +109,7 @@
       getOrgList () {
         getOrg().then((res) => {
           if (res.status === statusCode) {
-            this.orgs = res.result.data
+            this.orgs = Array.from(arrayToTreeArray(res.result.data, '-1'))
           }
         })
       },
@@ -176,7 +195,8 @@
       }
     },
     components: {
-      Breadcr
+      Breadcr,
+      TreeGrid
     }
   }
 </script>
