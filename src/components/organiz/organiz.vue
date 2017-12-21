@@ -83,7 +83,7 @@
         orgs: [],
         loading: true,
         total: 0,
-        pageIndex: 1,
+        pageIndex: 0,
         pageSize: 10,
         columns: [
           {
@@ -115,7 +115,7 @@
       },
       search () {
         this.total = 0
-        this.pageIndex = 1
+        this.pageIndex = 0
         this.searchOrg()
       },
       searchOrg () {
@@ -130,6 +130,7 @@
         searchOrg(queryParams, queryParamsPage).then((res) => {
           if (res.status === statusCode) {
             this.total = res.total
+            console.log(res.result.data)
             this.orgs = res.result.data
           }
         }).catch((error) => {

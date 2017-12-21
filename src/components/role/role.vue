@@ -62,7 +62,7 @@
     <el-table :data="roles" highlight-current-row @current-change="currentChange" height="500" border style="width: 100%">
       <el-table-column sortable prop="id" label="ID" align="center"></el-table-column>
       <el-table-column sortable prop="name" label="名称" align="center"></el-table-column>
-      <el-table-column prop="status" label="是否启用" align="center"></el-table-column>
+      <el-table-column prop="status" label="是否启用" :formatter="formatterColumn" align="center"></el-table-column>
       <el-table-column prop="describe" label="备注" align="center"></el-table-column>
       <el-table-column prop="action" label="操作">
         <template slot-scope="scope">
@@ -260,6 +260,10 @@
       },
       handleSizeChange (val) {
         console.log(`每页 ${val} 条`)
+      },
+      // 状态显示转换
+      formatterColumn (row, column) {
+        return row.status === 1 ? '是' : '否'
       }
     },
     components: {

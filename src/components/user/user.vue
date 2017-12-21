@@ -42,6 +42,23 @@
       </div>
     </el-dialog>
 
+    <!--用户赋权页面-->
+    <el-dialog title="用户赋权-${name}" :visible.sync="dialogFormVisible" center>
+      <el-tabs type="border-card" v-model="activeName">
+        <el-tab-pane label="菜单设置" name="first">
+          <transfer-page :AuthorizedData="AuthorizedData"></transfer-page>
+        </el-tab-pane>
+
+        <el-tab-pane label="权限设置" name="second">
+          <perm-editor></perm-editor>
+        </el-tab-pane>
+      </el-tabs>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="saveUserPermiss">保存</el-button>
+      </div>
+    </el-dialog>
+
     <breadcr :meName="meName"></breadcr>
 
     <el-form :inline="true" :model="searchForm">
@@ -59,14 +76,15 @@
       </el-form-item>
     </el-form>
 
-    <el-table :data="users" highlight-current-row @current-change="currentChange" height="500" border style="width: 100%">
+    <el-table :data="users" highlight-current-row @current-change="currentChange" height="500" border
+              style="width: 100%">
       <el-table-column sortable prop="name" label="姓名" align="center"></el-table-column>
       <el-table-column sortable prop="username" label="用户名" align="center"></el-table-column>
-      <el-table-column prop="status" label="是否启用" align="center"></el-table-column>
+      <el-table-column prop="status" label="是否启用" :formatter="formatterColumn" align="center"></el-table-column>
       <el-table-column prop="action" label="操作" align="center">
         <template slot-scope="scope">
           <el-button size="mini" @click="showEditUser(scope.$index,scope.row)" plain>编辑</el-button>
-          <el-button size="mini" icon="el-icon-edit" type="info" plain>用户赋权</el-button>
+          <el-button size="mini" icon="el-icon-edit" type="info" plain @click="showAuthorized">用户赋权</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -76,13 +94,20 @@
 
 <script type="text/ecmascript-6">
   import Breadcr from 'base/breadcr/breadcr'
-  import { getUser, addUser, editUser, searchUser } from 'api/user'
+  import { getUser, addUser, editUser, searchUser, getMenuList, getPermissionList } from 'api/user'
   import { statusCode } from 'common/js/config'
-  import {encodeQueryParam} from 'common/js/utils'
+  import { encodeQueryParam, arrayToTreeArray } from 'common/js/utils'
+  import TransferPage from 'components/transfer/transferPage'
+  import PermEditor from 'components/permission/permEditor'
 
   export default{
     data () {
       return {
+        AuthorizedData: [],
+        AuthorizedFinalData: [],
+        AuthorizedMenuData: [],
+        AuthorizedPermissionData: [],
+        AuthorizedchildrenData: [],
         meName: '用户管理',
         // 搜索数据
         searchForm: {
@@ -125,15 +150,16 @@
         total: 0,
         pageIndex: 1,
         pageSize: 10,
-        currentRow: null
+        currentRow: null,
+        activeName: 'first'
       }
     },
     created () {
       this._getUerList()
     },
     /* mounted () {
-      this.search()
-    }, */
+     this.search()
+     }, */
     methods: {
       _getUerList () {
         getUser().then((res) => {
@@ -238,7 +264,7 @@
           if (res.status === statusCode) {
             that.total = res.total
             this.users = res.result.data
-           // this.users = that.data
+            // this.users = that.data
           }
         }).catch((error) => {
           console.log(error)
@@ -250,10 +276,98 @@
       },
       currentChange (val) {
         this.currentRow = val
+      },
+      // 状态显示转换
+      formatterColumn (row, column) {
+        return row.status === 1 ? '是' : '否'
+      },
+      // 保存用户赋权
+      saveUserPermiss () {
+      },
+      showAuthorized () {
+        this.dialogFormVisible = true
+        getPermissionList().then((res) => {
+          if (res.status === statusCode) {
+            this.AuthorizedPermissionData = Array.from(res.result.data)
+            console.log(this.AuthorizedPermissionData)
+          }
+        })
+        getMenuList().then((res) => {
+          if (res.status === statusCode) {
+            this.AuthorizedMenuData = arrayToTreeArray(Array.from(res.result.data), '-1')
+            console.log(this.AuthorizedMenuData)
+          }
+        })
+        this.AuthorizedMenuData.forEach(item => {
+          item.leaf = 'NO'
+          item.level = '1'
+          item.expand = false
+          item.children.forEach(itemChild => {
+            this.AuthorizedPermissionData.forEach(permissionItem => {
+              if (itemChild.name === '综合设置') {
+                if (permissionItem.name === '组织架构' || permissionItem.name === '部门管理' || permissionItem.name === '岗位管理' || permissionItem.name === '人员管理') {
+                  itemChild.children = Array.from(permissionItem.actions)
+                  itemChild.leaf = 'NO'
+                  itemChild.level = '2'
+                  itemChild.expand = false
+                  itemChild.parent = item
+                  permissionItem.parent = itemChild
+                  this.AuthorizedFinalData.push(permissionItem)
+                }
+              }
+              if (itemChild.name === '机构管理') {
+                if (permissionItem.name === '组织架构') {
+                  itemChild.children = Array.from(permissionItem.actions)
+                  itemChild.leaf = 'NO'
+                  itemChild.level = '2'
+                  itemChild.expand = false
+                  itemChild.parent = item
+                  permissionItem.parent = itemChild
+                  this.AuthorizedFinalData.push(permissionItem)
+                }
+              }
+              if (itemChild.name === '权限管理') {
+                if (permissionItem.name === '权限设置' || permissionItem.name === '权限管理') {
+                  itemChild.children = Array.from(permissionItem.actions)
+                  itemChild.leaf = 'NO'
+                  itemChild.level = '2'
+                  itemChild.expand = false
+                  itemChild.parent = item
+                  permissionItem.parent = itemChild
+                  this.AuthorizedFinalData.push(permissionItem)
+                }
+              }
+              if (itemChild.name === permissionItem.name && itemChild.name !== '权限管理') {
+                itemChild.children = Array.from(permissionItem.actions)
+                itemChild.leaf = 'NO'
+                itemChild.level = '2'
+                itemChild.expand = false
+                itemChild.parent = item
+                permissionItem.parent = itemChild
+                this.AuthorizedFinalData.push(permissionItem)
+                permissionItem.actions.forEach(action => {
+                  action.name = action.describe
+                  action.leaf = 'YES'
+                  action.level = '3'
+                  action.expand = false
+                  action.parent = permissionItem
+                  this.AuthorizedFinalData.push(action)
+                })
+              }
+            })
+            this.AuthorizedFinalData.push(itemChild)
+          })
+          item.children = Array.from(item.children)
+          this.AuthorizedFinalData.push(item)
+        })
+        console.log(this.AuthorizedFinalData)
+        this.AuthorizedData = this.AuthorizedMenuData
       }
     },
     components: {
-      Breadcr
+      Breadcr,
+      TransferPage,
+      PermEditor
     }
   }
 </script>

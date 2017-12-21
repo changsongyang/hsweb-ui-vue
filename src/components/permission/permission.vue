@@ -147,7 +147,7 @@
       <el-table-column type="index" align="center"></el-table-column>
       <el-table-column sortable prop="id" label="ID" align="center"></el-table-column>
       <el-table-column sortable prop="name" label="名称" align="center"></el-table-column>
-      <el-table-column prop="status" label="状态" align="center"></el-table-column>
+      <el-table-column prop="status" label="状态" :formatter="formatterColumn" align="center"></el-table-column>
       <el-table-column prop="describe" label="备注" align="center"></el-table-column>
       <el-table-column prop="action" label="操作" align="center">
         <template slot-scope="scope">
@@ -157,14 +157,13 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="[10, 20, 30, 40]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="500">
+    <el-pagination @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="currentPage"
+                   :page-sizes="[10, 20, 30, 40]"
+                   :page-size="100"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="500">
     </el-pagination>
   </div>
 </template>
@@ -270,12 +269,8 @@
     created () {
       this._getPermissList()
     },
-    computed: {
-      renderStatus () {
-        return this.status === 1 ? '正常' : '失败'
-      }
-    },
     methods: {
+      // 展示权限列表
       _getPermissList () {
         getPermissList().then((res) => {
           if (res.status === 200) {
@@ -339,6 +334,7 @@
           })
         })
       },
+      // 添加
       showAndPermiss () {
         this.dialogFormVisible = true
         this.addForm = {
@@ -391,6 +387,7 @@
       handleSizeChange (val) {
         console.log(`每页 ${val} 条`)
       },
+      // 编辑
       showEditPermiss (index, row) {
         this.editFormVisible = true
         this.editForm = Object.assign(this.editForm, row)
@@ -426,6 +423,10 @@
             })
           }
         })
+      },
+      // 状态显示转换
+      formatterColumn (row, column) {
+        return row.status === 1 ? '正常' : '失效'
       }
     },
     components: {
