@@ -3,7 +3,7 @@
  * @type {number}
  */
 
-// 状态错误码
+// 状态码
 export const statusCode = 200
 // 成功
 // export const success = 0

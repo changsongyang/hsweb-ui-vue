@@ -32,6 +32,18 @@ export function queryParam (data) {
   return queryParam
 }
 
+export function quParam (data) {
+  let queryParam = {}
+  let terms = {
+    0: {column: 'orgId', type: 'and', value: ''}
+  }
+  terms[0].value = data
+  queryParam['terms[' + 0 + '].column'] = terms[0].column
+  queryParam['terms[' + 0 + '].type'] = terms[0].type
+  queryParam['terms[' + 0 + '].value'] = terms[0].value
+  return queryParam
+}
+
 export function arrayToTreeArray (data, root) {
   let r = []
   let o = []
