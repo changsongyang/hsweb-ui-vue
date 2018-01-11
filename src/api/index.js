@@ -15,7 +15,7 @@ axios.interceptors.response.use((response) => {
     if (parseInt(response.data.errcode) === 40001) {
       console.log('未登录')
       // 未登录
-      v.$emit('goto', '/login')
+      v.$emit('go', '/')
     }
   }
   return response

@@ -16,8 +16,7 @@ let router = new Router({
     {
       path: '/',
       name: '登录',
-      component: Login,
-      hidden: true
+      component: Login
     },
     {
       path: '/home',

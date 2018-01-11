@@ -21,9 +21,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-//  import { instance } from 'api/login'
-//  import qs from 'qs'
-  import {loginByUsername} from 'api/login'
+  import { loginByUsername } from 'api/login'
+  // import { statusCode } from 'common/js/config'
 
   export default{
     data () {
@@ -49,28 +48,16 @@
               username: this.account.username,
               password: this.account.pwd
             }
-
-            /* loginByUsername(loginParams).then(res => {
-//              alert(JSON.stringify(res.data))
-              this.logining = false
-              let {result, status, timestamp} = res.data
-              if (status !== 200) {
-                this.$message({
-                  message: '登录失败',
-                  type: 'error'
-                })
-              } else {
-                sessionStorage.setItem('access-user', JSON.stringify(result.userId))
-                sessionStorage.setItem('timestamp', JSON.stringify(timestamp))
-                this.$router.push({path: '/'})
-              }
-            }) */
             loginByUsername(loginParams).then((res) => {
               this.logining = false
-            //  console.log('登陆成功即将跳转--------')
-            //  console.log(res.result)
+              //  console.log('登陆成功即将跳转--------')
+              localStorage.setItem('access-user', JSON.stringify(res))
               this.$router.push({path: '/home'})
-            //  console.log('登陆成功--------')
+              this.$message.success({
+                message: '登录成功',
+                duration: 2000
+              })
+              //  console.log('登陆成功--------')
             }).catch((err) => {
               this.$message.error(err)
               this.logining = false
