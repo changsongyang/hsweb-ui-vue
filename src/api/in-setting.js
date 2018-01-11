@@ -47,3 +47,19 @@ export function getPerson (id) {
 export function addDepartment (params) {
   return API.POST('/department', params)
 }
+
+export function addPosition (params) {
+  return API.POST('/position', params)
+}
+
+export function editDep (id, params) {
+  return API.PUT(`/department/${id}`, params)
+}
+
+export function editPos (id, params) {
+  return API.PUT(`/position/${id}`, params)
+}
+
+export function editPer (id, params) {
+  return API.PUT(`/person/${id}`, params)
+}

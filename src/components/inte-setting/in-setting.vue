@@ -1,27 +1,23 @@
 <template>
   <div class="wrap">
-    <!--新建部门页面-->
-    <el-dialog title="部门管理" :visible.sync="dialogFormVisible" center>
+    <!--添加子部门页面-->
+    <el-dialog v-if="depChild" title="添加子部门" :visible.sync="dialogFormVisible" center>
       <el-form :model="addForm" ref="addForm">
         <el-form-item label="部门名称：" :label-width="formLabelWidth">
           <el-input v-model="addForm.name" auto-complete="off" style="width: 240px"></el-input>
         </el-form-item>
         <el-form-item label="所属机构：" :label-width="formLabelWidth">
-          <!--<el-select v-model="value">
-            <el-option v-for="item in options" :key="item.value"
-                       :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
-          </el-select>-->
           <el-input v-model="addForm.orgname" suffix-icon="el-icon-arrow-down" :disabled="true" style="width: 235px">
           </el-input>
         </el-form-item>
         <el-form-item label="上级部门：" :label-width="formLabelWidth">
-          <!--<el-select v-model="value">
-            <el-option v-for="item in options" :key="item.value"
-                       :label="item.label" :value="item.value" :disabled="item.disabled"></el-option>
-          </el-select>-->
           <el-input v-model="addForm.parentname" suffix-icon="el-icon-arrow-down" :disabled="true" style="width: 235px">
           </el-input>
         </el-form-item>
+        <!--<el-form-item label="上上级部门ID：" :label-width="formLabelWidth">
+          <el-input v-model="addForm.parentId" suffix-icon="el-icon-arrow-down" :disabled="true" style="width: 235px">
+          </el-input>
+        </el-form-item>-->
         <el-form-item label="部门编码：" :label-width="formLabelWidth">
           <el-input v-model="addForm.code" auto-complete="off" style="width: 240px"></el-input>
         </el-form-item>
@@ -31,6 +27,102 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="saveDepartment">保存</el-button>
+      </div>
+    </el-dialog>
+
+    <!--编辑部门页面-->
+    <el-dialog title="编辑部门" v-if="editDepChild" :visible.sync="editFormVisible" center>
+      <el-form :model="editDepForm" ref="editDepForm">
+        <el-form-item label="部门名称：" :label-width="formLabelWidth">
+          <el-input v-model="editDepForm.departmentname" auto-complete="off" style="width: 240px"></el-input>
+        </el-form-item>
+        <el-form-item label="所属机构：" :label-width="formLabelWidth">
+          <el-input v-model="editDepForm.orgname" suffix-icon="el-icon-arrow-down" :disabled="true" style="width: 235px">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="上级部门：" :label-width="formLabelWidth">
+          <el-input v-model="editDepForm.parentId" suffix-icon="el-icon-arrow-down" :disabled="true" style="width: 235px">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="部门编码：" :label-width="formLabelWidth">
+          <el-input v-model="editDepForm.code" auto-complete="off" style="width: 240px"></el-input>
+        </el-form-item>
+        <el-form-item label="备注：" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="editDepForm.remark"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="editDep">保存</el-button>
+      </div>
+    </el-dialog>
+
+    <!--添加子岗位页面-->
+    <el-dialog v-if="posChild" title="添加子岗位" :visible.sync="dialogFormVisible" center>
+      <el-form :model="posAddForm" ref="posAddForm">
+        <el-form-item label="岗位名称：" :label-width="formLabelWidth">
+          <el-input v-model="posAddForm.name" auto-complete="off" style="width: 240px"></el-input>
+        </el-form-item>
+        <el-form-item label="所在部门：" :label-width="formLabelWidth">
+          <el-input v-model="posAddForm.departmentname" suffix-icon="el-icon-arrow-down" :disabled="true" style="width: 235px">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="上级岗位：" :label-width="formLabelWidth">
+          <el-input v-model="posAddForm.positionname" suffix-icon="el-icon-arrow-down" :disabled="true" style="width: 235px">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="备注：" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="posAddForm.remark"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="savePosi">保存</el-button>
+      </div>
+    </el-dialog>
+
+    <!--编辑岗位页面-->
+    <el-dialog  title="编辑岗位" v-if="editPosChild" :visible.sync="editFormVisible" center>
+      <el-form :model="editPosForm" ref="editPosForm">
+        <el-form-item label="岗位名称：" :label-width="formLabelWidth">
+          <el-input v-model="editPosForm.positionname" auto-complete="off" style="width: 240px"></el-input>
+        </el-form-item>
+        <el-form-item label="所在部门：" :label-width="formLabelWidth">
+          <el-input v-model="editPosForm.departmentname" suffix-icon="el-icon-arrow-down" :disabled="true" style="width: 235px">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="上级岗位：" :label-width="formLabelWidth">
+          <el-input v-model="editPosForm.parentId" suffix-icon="el-icon-arrow-down" :disabled="true" style="width: 235px">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="备注：" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="editPosForm.remark"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="editPos">保存</el-button>
+      </div>
+    </el-dialog>
+
+    <!--编辑人员页面-->
+    <el-dialog  title="编辑人员" v-if="editPerChild" :visible.sync="editFormVisible" center>
+      <el-form :model="editPosForm" ref="editPosForm">
+        <el-form-item label="岗位名称：" :label-width="formLabelWidth">
+          <el-input v-model="editPosForm.positionname" auto-complete="off" style="width: 240px"></el-input>
+        </el-form-item>
+        <el-form-item label="所在部门：" :label-width="formLabelWidth">
+          <el-input v-model="editPosForm.departmentname" suffix-icon="el-icon-arrow-down" :disabled="true" style="width: 235px">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="上级岗位：" :label-width="formLabelWidth">
+          <el-input v-model="editPosForm.parentId" suffix-icon="el-icon-arrow-down" :disabled="true" style="width: 235px">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="备注：" :label-width="formLabelWidth">
+          <el-input type="textarea" v-model="editPosForm.remark"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="editPer">保存</el-button>
       </div>
     </el-dialog>
 
@@ -48,7 +140,7 @@
         <div class="top">
           <div class="top-left">
             <div class="buttons">
-              <el-button type="primary" @click="showAndDeps">新建职位</el-button>
+              <el-button type="primary">新建职位</el-button>
               <el-button type="success">保存全部</el-button>
             </div>
             <!--<el-table :data="departments" ref="department" border style="width: 100%" @row-click="getPositions($event)">
@@ -66,7 +158,7 @@
               </el-table-column>
             </el-table>-->
             <tree-grid :columns="columnsDep" :columntype="true" :tree-structure="true" :isadd="true" :iseditor="true"
-                       :data-source="departments" @addMenu="showAndDep" :content="contentDep"
+                       :data-source="departments" @addMenu="showAndDep" @editorMenu="showEditorDep" :content="contentDep"
                        @treeGridClick="getPositions($event)"></tree-grid>
           </div>
           <div class="top-right">
@@ -89,7 +181,7 @@
               </el-table-column>
             </el-table>-->
             <tree-grid :columns="columnsPos" :columntype="true" :tree-structure="true" :isadd="true" :iseditor="true"
-                       :data-source="positions" :content="contentPos"
+                       :data-source="positions" :content="contentPos" @addMenu="showAndPos" @editorMenu="showEditorPos"
                        @treeGridClick="getPerson($event)"></tree-grid>
           </div>
         </div>
@@ -105,7 +197,7 @@
             <el-table-column prop="action" label="操作" align="center">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="light" content="编辑" placement="bottom-start">
-                  <el-button size="mini" type="primary" icon="el-icon-edit-outline"></el-button>
+                  <el-button size="mini" type="primary" icon="el-icon-edit" @click="showEditPer"></el-button>
                 </el-tooltip>
               </template>
             </el-table-column>
@@ -117,7 +209,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {getOrgs, getDepartment, getPosition, getPerson, addDepartment} from 'api/in-setting'
+  import { getOrgs, getDepartment, getPosition, getPerson, addDepartment, addPosition, editDep, editPos } from 'api/in-setting'
   import { statusCode } from 'common/js/config'
   import { quParam, arrayToTreeArray } from 'common/js/utils'
   import TreeGrid from 'base/basetable/TreeGrid'
@@ -125,6 +217,11 @@
   export default {
     data () {
       return {
+        depChild: false,
+        posChild: false,
+        editDepChild: false,
+        editPosChild: false,
+        editPerChild: false,
         orgs: [],
         departments: [],
         positions: [],
@@ -132,6 +229,7 @@
         id: '',
         // 添加相关数据
         dialogFormVisible: false,  // 添加页面是否显示
+        // 添加子部门数据
         addForm: {
           name: '',
           parentname: '',
@@ -141,10 +239,47 @@
           orgId: '',
           remark: ''
         },
+        // 添加子岗位数据
+        posAddForm: {
+          name: '',
+          parentname: '',
+          departmentname: '',
+          positionname: '',
+          parentId: '',
+          departmentId: '',
+          remark: ''
+        },
         addFormRules: {
           name: [{required: true, message: '请输入部门姓名', trigger: 'blur'}],
           code: [{required: true, message: '请输入部门编码', trigger: 'blur'}],
           remark: [{required: true, message: '备注', trigger: 'blur'}]
+        },
+        // 编辑相关数据
+        editFormVisible: false,   // 编辑页面是否显示
+        // 编辑部门数据
+        editDepForm: {
+          id: '',
+          departmentname: '',
+          parentname: '',
+          orgname: '',
+          code: '',
+          parentId: '',
+          orgId: '',
+          remark: ''
+        },
+        editFormRules: {
+          name: [{required: true, message: '请输入部门名称', trigger: 'blur'}],
+          code: [{required: true, message: '请输入部门编码', trigger: 'blur'}],
+          remark: [{required: true, message: '备注', trigger: 'blur'}]
+        },
+        // 编辑岗位数据
+        editPosForm: {
+          id: '',
+          positionname: '',
+          departmentname: '',
+          parentId: '',
+          orgId: '',
+          remark: ''
         },
         formLabelWidth: '120px',
         columns: [
@@ -176,8 +311,6 @@
       getOrgList () {
         getOrgs().then((res) => {
           if (res.status === statusCode) {
-//            console.log(res.result.data)
-          //  this.orgs = res.result.data
             this.orgs = Array.from(arrayToTreeArray(res.result.data, '-1'))
           }
         })
@@ -212,25 +345,17 @@
         })
       },
       showAndDep (index, row) {
-        console.log(row)
+       // console.log(row)
         this.dialogFormVisible = true
+        this.posChild = false
+        this.depChild = true
         this.orgs.forEach(item => {
           if (item.orgId === row.orgId) {
             this.addForm.parentname = row.name
             this.addForm.orgname = item.name
-            this.addForm.parentId = row.parentId
+            this.addForm.parentId = row.id
             this.addForm.orgId = row.orgId
           }
-        })
-      },
-      showAndDeps () {
-       // console.log(data)
-        this.dialogFormVisible = true
-        this.orgs.forEach(item => {
-          this.addForm.parentname = item.name
-          this.addForm.orgname = item.name
-       //   this.addForm.parentId = item.parentId
-          this.addForm.orgId = item.orgId
         })
       },
       saveDepartment () {
@@ -245,9 +370,16 @@
                     message: '添加成功',
                     duration: 2000
                   })
-                  that.$refs['addForm'].resetFields()
+                  let queryParams = quParam(this.addForm.orgId)
+                  let queryParamsPage = {
+                    paging: false
+                  }
+                  getDepartment(queryParams, queryParamsPage).then((res) => {
+                    if (res.status === statusCode) {
+                      this.departments = Array.from(arrayToTreeArray(res.result.data, '-1'))
+                    }
+                  })
                   that.dialogFormVisible = false
-                  that.search()
                 } else {
                   that.$message.error({
                     message: '添加失败',
@@ -265,7 +397,152 @@
             })
           }
         })
-      }
+      },
+      showEditorDep ($event) {
+      //  console.log($event)
+        this.editFormVisible = true
+        this.editDepChild = true
+        this.editPosChild = false
+      //  this.editDepForm = Object.assign(this.editDepForm)
+        this.orgs.forEach(item => {
+          if (item.orgId === $event[1].orgId) {
+            this.editDepForm.departmentname = $event[1].name
+            this.editDepForm.orgname = item.name
+            this.editDepForm.parentId = $event[1].parentId
+            this.editDepForm.code = $event[1].code
+            this.editDepForm.orgId = $event[1].orgId
+            this.editDepForm.id = $event[1].id
+          }
+        })
+      },
+      editDep () {
+        let that = this
+        this.$refs.editDepForm.validate((valid) => {
+          if (valid) {
+            let params = Object.assign({}, this.editDepForm)
+          //  console.log(params)
+            editDep(params.id, params).then((result) => {
+              if (result.status === statusCode) {
+                that.$message.success({
+                  message: '修改成功',
+                  duration: 2000
+                })
+                that.$refs['editDepForm'].resetFields()
+                that.editFormVisible = false
+              } else {
+                that.$message.error({
+                  message: '修改失败',
+                  duration: 2000
+                })
+                this._getUerList()
+              }
+            }).catch((error) => {
+              console.log(error)
+              that.$message.error({
+                message: '请求出现异常',
+                duration: 2000
+              })
+            })
+          }
+        })
+      },
+      showEditorPos ($event) {
+        console.log($event)
+        this.editFormVisible = true
+        this.editPosChild = true
+        this.editDepChild = false
+        //  this.editDepForm = Object.assign(this.editDepForm)
+        this.departments.forEach(item => {
+          if (item.departmentId === $event[1].departmentId) {
+            this.editPosForm.departmentname = $event[1].name
+            this.editPosForm.positionname = item.name
+            this.editPosForm.parentId = $event[1].parentId
+            this.editPosForm.id = $event[1].id
+          }
+        })
+      },
+      editPos () {
+        let that = this
+        this.$refs.editPosForm.validate((valid) => {
+          if (valid) {
+            let params = Object.assign({}, this.editPosForm)
+            console.log(params)
+            editPos(params.id, params).then((result) => {
+              if (result.status === statusCode) {
+                that.$message.success({
+                  message: '修改成功',
+                  duration: 2000
+                })
+                that.$refs['editPosForm'].resetFields()
+                that.editFormVisible = false
+              } else {
+                that.$message.error({
+                  message: '修改失败',
+                  duration: 2000
+                })
+                this._getUerList()
+              }
+            }).catch((error) => {
+              console.log(error)
+              that.$message.error({
+                message: '请求出现异常',
+                duration: 2000
+              })
+            })
+          }
+        })
+      },
+      showAndPos (index, row) {
+        this.dialogFormVisible = true
+        this.depChild = false
+        this.posChild = true
+        this.departments.forEach(item => {
+          if (item.departmentId === row.departmentId) {
+            this.posAddForm.positionname = row.name
+            this.posAddForm.departmentname = item.name
+            this.posAddForm.parentId = row.id
+            this.posAddForm.departmentId = row.departmentId
+          }
+        })
+      },
+      savePosi () {
+        let that = this
+        this.$refs.posAddForm.validate((valid) => {
+          if (valid) {
+            this.$confirm('确定保存吗？', '提示', {}).then(() => {
+              let params = Object.assign({}, this.posAddForm)
+              addPosition(params).then((res) => {
+                if (res.status === statusCode) {
+                  that.$message.success({
+                    message: '添加成功',
+                    duration: 2000
+                  })
+                  that.dialogFormVisible = false
+                } else {
+                  that.$message.error({
+                    message: '添加失败',
+                    duration: 2000
+                  })
+                }
+              }).catch((error) => {
+                console.log(error)
+                that.$message.error({
+                  showClose: true,
+                  message: '请求出现异常',
+                  duration: 2000
+                })
+              })
+            })
+          }
+        })
+      },
+      showEditPer () {
+        this.dialogFormVisible = true
+        this.depChild = false
+        this.posChild = false
+        this.editDepChild = true
+      },
+      editPer () {}
     },
     components: {
       TreeGrid
@@ -280,40 +557,40 @@
     width: 100%;
     height: 100%;
 
-    .container{
+    .container {
       width: 100%;
       height: 100%;
-      .eltablecus{
-        background:#eff7ff
+      .eltablecus {
+        background: #eff7ff
       }
-      .aside{
+      .aside {
         border: 3px solid #96c2f1;
-        background:#eff7ff;
+        background: #eff7ff;
       }
     }
 
-    .main{
+    .main {
       // background-color: cornflowerblue;
 
-      .top{
+      .top {
         width: 100%;
         height: 50%;
-        box-sizing:border-box;
-        -moz-box-sizing:border-box; /* Firefox */
-        -webkit-box-sizing:border-box; /* Safari */
+        box-sizing: border-box;
+        -moz-box-sizing: border-box; /* Firefox */
+        -webkit-box-sizing: border-box; /* Safari */
         margin-left: 5px;
-      //  border: 1px solid #429EFD;
-      //  justify-content: space-between;
+        //  border: 1px solid #429EFD;
+        //  justify-content: space-between;
 
-        .top-left{
+        .top-left {
           width: 50%;
           height: 100%;
           float: left;
           overflow: hidden;
-          box-sizing:border-box;
-          -moz-box-sizing:border-box; /* Firefox */
-          -webkit-box-sizing:border-box; /* Safari */
-         // border: 1px solid #429EFD;
+          box-sizing: border-box;
+          -moz-box-sizing: border-box; /* Firefox */
+          -webkit-box-sizing: border-box; /* Safari */
+          // border: 1px solid #429EFD;
           border-top-width: 5px;
           border-top-style: solid;
           border-top-color: #96c2f1;
@@ -335,20 +612,19 @@
           -webkit-border-bottom-right-radius: 2px;*/
           padding: 8px 10px;
 
-
-          .buttons{
+          .buttons {
             height: 60px;
           }
         }
-        .top-right{
+        .top-right {
           width: 50%;
           height: 100%;
           float: right;
-          box-sizing:border-box;
-          -moz-box-sizing:border-box; /* Firefox */
-          -webkit-box-sizing:border-box; /* Safari */
-       //   border: 1px solid #429EFD;
-        //  border-left: 0;
+          box-sizing: border-box;
+          -moz-box-sizing: border-box; /* Firefox */
+          -webkit-box-sizing: border-box; /* Safari */
+          //   border: 1px solid #429EFD;
+          //  border-left: 0;
           /*border-top-right-radius: 2px;
           border-bottom-right-radius: 2px;
           -moz-border-radius-topright: 2px;
@@ -368,25 +644,23 @@
           border-right-color: #96c2f1;
           padding: 8px 10px;
 
-
-
-          .buttons{
+          .buttons {
             height: 60px;
           }
         }
       }
 
-      .bottom{
+      .bottom {
         width: 100%;
         height: 50%;
-        box-sizing:border-box;
-        -moz-box-sizing:border-box; /* Firefox */
-        -webkit-box-sizing:border-box; /* Safari */
+        box-sizing: border-box;
+        -moz-box-sizing: border-box; /* Firefox */
+        -webkit-box-sizing: border-box; /* Safari */
         border: 5px solid #96c2f1;
         padding: 8px 10px;
         margin-left: 5px;
 
-        .buttons{
+        .buttons {
           height: 60px;
         }
       }
