@@ -20,6 +20,30 @@ dev: {
     },
 ```
 
+## 项目截图
+
+**登录**
+
+ ![登录](http://omux103p0.bkt.clouddn.com/%E7%99%BB%E5%BD%95.gif)
+
+**用户管理**
+
+ ![用户管理](http://omux103p0.bkt.clouddn.com/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.gif)
+
+**角色管理**
+
+ ![角色管理](http://omux103p0.bkt.clouddn.com/%E8%A7%92%E8%89%B2%E7%AE%A1%E7%90%86.gif)
+
+**权限管理**
+
+ ![权限管理](http://omux103p0.bkt.clouddn.com/%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86.gif)
+
+**菜单管理**
+
+ ![菜单管理](http://omux103p0.bkt.clouddn.com/%E8%8F%9C%E5%8D%95%E7%AE%A1%E7%90%86.gif)
+
+
+
 ## Build Setup
 
 ``` bash
