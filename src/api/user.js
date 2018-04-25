@@ -33,3 +33,27 @@ export function searchUser (queryParams, queryParamsIndex) {
     return Promise.resolve(JSON.parse(res))
   })
 }
+
+export function getMenuList () {
+  const url = '/menu'
+  const data = Object.assign({}, {
+    paging: false
+  })
+  return API.GET(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(JSON.parse(res))
+  })
+}
+
+export function getPermissionList () {
+  const url = '/permission'
+  const data = Object.assign({}, {
+    paging: false
+  })
+  return API.GET(url, {
+    params: data
+  }).then((res) => {
+    return Promise.resolve(JSON.parse(res))
+  })
+}

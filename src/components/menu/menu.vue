@@ -46,7 +46,8 @@
     </el-form>
 
     <!--<parent-children :tableSoureData='tableSoureData' :showData='showData' :customerQueryData='customerQueryData'></parent-children>-->
-    <tree-grid :columns="columns" :tree-structure="true" :data-source="dataSource" :treeStructure="true"></tree-grid>
+    <tree-grid :columns="columns" :tree-structure="true" :data-source="dataSource" :treeStructure="true"
+               :isadd="true" :isdel="true"></tree-grid>
   </div>
 
 </template>

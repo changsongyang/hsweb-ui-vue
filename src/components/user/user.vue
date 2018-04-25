@@ -43,7 +43,7 @@
     </el-dialog>
 
     <!--用户赋权页面-->
-    <el-dialog title="用户赋权-${name}" :visible.sync="dialogFormVisible" center>
+    <!--<el-dialog title="用户赋权-${name}" :visible.sync="dialogFormVisible" center>
       <el-tabs type="border-card" v-model="activeName">
         <el-tab-pane label="菜单设置" name="first">
           <transfer-page :AuthorizedData="AuthorizedData"></transfer-page>
@@ -57,7 +57,7 @@
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="saveUserPermiss">保存</el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
 
     <breadcr :meName="meName"></breadcr>
 
@@ -164,6 +164,7 @@
       _getUerList () {
         getUser().then((res) => {
           if (res.status === statusCode) {
+            console.log(res.result.data)
             this.users = res.result.data
           }
         })
